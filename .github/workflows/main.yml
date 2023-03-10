@@ -1,9 +1,6 @@
 name: ci
 
-on:
-  push:
-    branches:
-      - 'master'
+on: push
 
 jobs:
   docker:
@@ -22,7 +19,15 @@ jobs:
           load: true
           push: false
           tags: podman/build:latest
+          build-args:
+            - 'PODMAN_VERSION=4.4.2'
       -
-        name: docker ls
+        name: fetch artifact
         run: |
-          docker image ls -a
+          docker cp $(docker create --name tc podman/build:latest):/root/podman-4.4.2/bin/podman ./podman && docker rm tc
+      -
+        name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: podman
