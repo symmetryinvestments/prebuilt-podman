@@ -19,8 +19,8 @@ jobs:
           load: true
           push: false
           tags: podman/build:latest
-          build-args:
-            - 'PODMAN_VERSION=4.4.2'
+          build-args: |
+            PODMAN_VERSION=4.4.2
       -
         name: fetch artifact
         run: |
