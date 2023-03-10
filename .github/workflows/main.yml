@@ -24,7 +24,7 @@ jobs:
       -
         name: fetch artifact
         run: |
-          docker cp $(docker create --name tc podman/build:latest):/root/podman-4.4.2/bin/podman ./podman && docker rm tc
+          docker cp $(docker create --name tc podman/build:latest):/podman-4.4.2/bin/podman ./podman && docker rm tc
       -
         name: Release
         uses: softprops/action-gh-release@v1
