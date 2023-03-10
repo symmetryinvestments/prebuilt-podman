@@ -10,6 +10,6 @@ RUN chmod +x ./installer_linux
 RUN SHELL=/bin/bash ./installer_linux
 
 RUN wget https://github.com/containers/podman/archive/refs/tags/v${PODMAN_VERSION}.tar.gz && \
-    tar xvf v${PODMAN_VERSION}.tar.gz
+    tar xf v${PODMAN_VERSION}.tar.gz
 
 RUN . /root/.bash_profile && cd podman-*/ && make BUILDTAGS="selinux seccomp systemd"

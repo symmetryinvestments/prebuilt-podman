@@ -20,8 +20,8 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: false
-          tags: build:latest
+          tags: podman/build:latest
       -
         name: docker ls
         run: |
-          docker image ls
+          docker image ls -a
