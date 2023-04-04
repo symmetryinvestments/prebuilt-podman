@@ -25,7 +25,7 @@ jobs:
         name: fetch artifact
         run: |
           docker cp $(docker create --name tc podman/build:latest):/podman-4.4.4/bin ./podman && docker rm tc
-          tar -czf podman.tar.gx -C podman podman podman-remote quadlet rootlessport
+          tar -czf podman.tar.gz -C podman podman podman-remote quadlet rootlessport
           sha256sum podman.tar.gz | awk '{ print $1 }' > podman.tar.gz.sha256
       -
         name: Release
