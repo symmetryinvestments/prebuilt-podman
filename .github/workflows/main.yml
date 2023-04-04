@@ -25,13 +25,13 @@ jobs:
         name: fetch artifact
         run: |
           docker cp $(docker create --name tc podman/build:latest):/podman-4.4.4/bin ./podman && docker rm tc
-          tar -czf podman.tar.xz -C podman *
-          sha256sum podman.tar.xz | awk '{ print $1 }' > podman.tar.xz.sha256
+          tar -czf podman.tar.gx -C podman podman podman-remote quadlet rootlessport
+          sha256sum podman.tar.gz | awk '{ print $1 }' > podman.tar.gz.sha256
       -
         name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            podman.tar.xz
-            podman.tar.xz.sha256
+            podman.tar.gz
+            podman.tar.gz.sha256
