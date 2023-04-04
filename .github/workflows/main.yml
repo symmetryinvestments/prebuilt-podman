@@ -20,11 +20,11 @@ jobs:
           push: false
           tags: podman/build:latest
           build-args: |
-            PODMAN_VERSION=4.4.2
+            PODMAN_VERSION=4.4.4
       -
         name: fetch artifact
         run: |
-          docker cp $(docker create --name tc podman/build:latest):/podman-4.4.2/bin ./podman && docker rm tc
+          docker cp $(docker create --name tc podman/build:latest):/podman-4.4.4/bin ./podman && docker rm tc
           tar -czf podman.tar.xz -C podman *
           sha256sum podman.tar.xz | awk '{ print $1 }' > podman.tar.xz.sha256
       -
