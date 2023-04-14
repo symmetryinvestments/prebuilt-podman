@@ -27,6 +27,9 @@ jobs:
           docker cp $(docker create --name tc podman/build:latest):/podman-4.4.4/bin ./podman && docker rm tc
           tar -czf podman.tar.gz -C podman podman podman-remote quadlet rootlessport
           sha256sum podman.tar.gz | awk '{ print $1 }' > podman.tar.gz.sha256
+          docker cp $(docker create --name tc podman/build:latest):/conmon-2.1.7/bin/conmon . && docker rm tc
+          tar -czf conmon.tar.gz conmon
+          sha256sum conmon.tar.gz | awk '{ print $1 }' > conmon.tar.gz.sha256
       -
         name: Release
         uses: softprops/action-gh-release@v1
@@ -35,3 +38,5 @@ jobs:
           files: |
             podman.tar.gz
             podman.tar.gz.sha256
+            conmon.tar.gz
+            conmon.tar.gz.sha256
