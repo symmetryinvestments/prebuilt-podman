@@ -13,6 +13,6 @@ RUN wget https://github.com/containers/podman/archive/refs/tags/v${PODMAN_VERSIO
 RUN wget https://github.com/containers/conmon/archive/refs/tags/v${CONMON_VERSION}.tar.gz && \
     tar xf v${CONMON_VERSION}.tar.gz
 
-RUN . /root/.bash_profile && cd podman-*/ && make BUILDTAGS="selinux seccomp systemd"
+RUN cd podman-*/ && PATH=$PATH:/usr/local/go/bin make BUILDTAGS="selinux seccomp systemd"
 
-RUN . /root/.bash_profile && cd conmon-*/ && make
+RUN cd conmon-*/ && PATH=$PATH:/usr/local/go/bin make
