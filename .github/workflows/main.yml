@@ -20,8 +20,8 @@ jobs:
           push: false
           tags: podman/build:latest
           build-args: |
-            PODMAN_VERSION=4.4.4
-            CONMON_VERSION=2.1.7
+            PODMAN_VERSION=4.9.0
+            CONMON_VERSION=2.1.10
       -
         name: fetch artifact
         run: |
