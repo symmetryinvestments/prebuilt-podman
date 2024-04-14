@@ -2,8 +2,12 @@ name: ci
 
 on: push
 
+env:
+  PODMAN_VERSION: 5.0.1
+  CONMON_VERSION: 2.1.10
+
 jobs:
-  docker:
+  debian11:
     runs-on: ubuntu-latest
     steps:
       -
@@ -20,15 +24,16 @@ jobs:
           push: false
           tags: podman/build:latest
           build-args: |
-            PODMAN_VERSION=4.9.0
-            CONMON_VERSION=2.1.10
+            PODMAN_VERSION=${{ env.PODMAN_VERSION }}
+            CONMON_VERSION=${{ env.CONMON_VERSION }}
+            DEBIAN=11
       -
         name: fetch artifact
         run: |
-          docker cp $(docker create --name tc podman/build:latest):/podman-4.9.0/bin ./podman && docker rm tc
+          docker cp $(docker create --name tc podman/build:latest):/podman-${PODMAN_VERSION}/bin ./podman && docker rm tc
           tar -czf podman.tar.gz -C podman podman podman-remote quadlet rootlessport
           sha256sum podman.tar.gz | awk '{ print $1 }' > podman.tar.gz.sha256
-          docker cp $(docker create --name tc podman/build:latest):/conmon-2.1.10/bin/conmon . && docker rm tc
+          docker cp $(docker create --name tc podman/build:latest):/conmon-${CONMON_VERSION}/bin/conmon . && docker rm tc
           tar -czf conmon.tar.gz conmon
           sha256sum conmon.tar.gz | awk '{ print $1 }' > conmon.tar.gz.sha256
       -
@@ -37,7 +42,46 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            podman.tar.gz
-            podman.tar.gz.sha256
-            conmon.tar.gz
-            conmon.tar.gz.sha256
+            podman-deb11.tar.gz
+            podman-deb11.tar.gz.sha256
+            conmon-deb11.tar.gz
+            conmon-deb11.tar.gz.sha256
+  debian12:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          load: true
+          push: false
+          tags: podman/build:latest
+          build-args: |
+            PODMAN_VERSION=${{ env.PODMAN_VERSION }}
+            CONMON_VERSION=${{ env.CONMON_VERSION }}
+            DEBIAN=12
+      -
+        name: fetch artifact
+        run: |
+          docker cp $(docker create --name tc podman/build:latest):/podman-${PODMAN_VERSION}/bin ./podman && docker rm tc
+          tar -czf podman.tar.gz -C podman podman podman-remote quadlet rootlessport
+          sha256sum podman.tar.gz | awk '{ print $1 }' > podman.tar.gz.sha256
+          docker cp $(docker create --name tc podman/build:latest):/conmon-${CONMON_VERSION}/bin/conmon . && docker rm tc
+          tar -czf conmon.tar.gz conmon
+          sha256sum conmon.tar.gz | awk '{ print $1 }' > conmon.tar.gz.sha256
+      -
+        name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            podman-deb12.tar.gz
+            podman-deb12.tar.gz.sha256
+            conmon-deb12.tar.gz
+            conmon-deb12.tar.gz.sha256
