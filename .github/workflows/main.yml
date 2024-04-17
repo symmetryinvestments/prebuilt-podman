@@ -31,11 +31,11 @@ jobs:
         name: fetch artifact
         run: |
           docker cp $(docker create --name tc podman/build:latest):/podman-${PODMAN_VERSION}/bin ./podman && docker rm tc
-          tar -czf podman.tar.gz -C podman podman podman-remote quadlet rootlessport
-          sha256sum podman.tar.gz | awk '{ print $1 }' > podman.tar.gz.sha256
+          tar -czf podman-deb11.tar.gz -C podman podman podman-remote quadlet rootlessport
+          sha256sum podman-deb11.tar.gz | awk '{ print $1 }' > podman-deb11.tar.gz.sha256
           docker cp $(docker create --name tc podman/build:latest):/conmon-${CONMON_VERSION}/bin/conmon . && docker rm tc
-          tar -czf conmon.tar.gz conmon
-          sha256sum conmon.tar.gz | awk '{ print $1 }' > conmon.tar.gz.sha256
+          tar -czf conmon-deb11.tar.gz conmon
+          sha256sum conmon-deb11.tar.gz | awk '{ print $1 }' > conmon-deb11.tar.gz.sha256
       -
         name: Release
         uses: softprops/action-gh-release@v1
@@ -70,11 +70,11 @@ jobs:
         name: fetch artifact
         run: |
           docker cp $(docker create --name tc podman/build:latest):/podman-${PODMAN_VERSION}/bin ./podman && docker rm tc
-          tar -czf podman.tar.gz -C podman podman podman-remote quadlet rootlessport
-          sha256sum podman.tar.gz | awk '{ print $1 }' > podman.tar.gz.sha256
+          tar -czf podman-deb12.tar.gz -C podman podman podman-remote quadlet rootlessport
+          sha256sum podman-deb12.tar.gz | awk '{ print $1 }' > podman-deb12.tar.gz.sha256
           docker cp $(docker create --name tc podman/build:latest):/conmon-${CONMON_VERSION}/bin/conmon . && docker rm tc
-          tar -czf conmon.tar.gz conmon
-          sha256sum conmon.tar.gz | awk '{ print $1 }' > conmon.tar.gz.sha256
+          tar -czf conmon-deb12.tar.gz conmon
+          sha256sum conmon-deb12.tar.gz | awk '{ print $1 }' > conmon-deb12.tar.gz.sha256
       -
         name: Release
         uses: softprops/action-gh-release@v1
