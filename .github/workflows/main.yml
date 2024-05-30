@@ -3,7 +3,7 @@ name: ci
 on: push
 
 env:
-  PODMAN_VERSION: 5.0.1
+  PODMAN_VERSION: 4.9.4
   CONMON_VERSION: 2.1.10
 
 jobs:
